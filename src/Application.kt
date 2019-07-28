@@ -62,7 +62,7 @@ fun Application.module() {
                                     id = "t${thread.id}"
                                     p { +"${thread.title} | ${thread.time}" }
                                     p { +thread.text }
-                                    p { a("thread/${thread.id}") { +"Thread" } }
+                                    p { a("thread/${thread.id}") { +"${thread.comments.size} comments" } }
                                 }
                             }
                             p {
