@@ -45,30 +45,33 @@ fun Application.module() {
             }
 
             get("{page?}") {
-                with (call.attributes[boardKey]) {
-                    val page = call.parameters["page"]?.toIntOrNull() ?: 1
-                    val startIndex = min((page - 1) * 10, threads.size)
-                    val endIndex = min(startIndex + 10, threads.size)
+                val board = call.attributes[boardKey]
+                val page = call.parameters["page"]?.toIntOrNull() ?: 1
+                val startIndex = min((page - 1) * 10, board.threads.size)
+                val endIndex = min(startIndex + 10, board.threads.size)
 
-                    call.respondHtml {
-                        head {
-                            title { +"/$name/ | Diskuss" }
+                call.respondHtml {
+                    head {
+                        title { +"/${board.name}/ | Diskuss" }
+                    }
+                    body {
+                        h1 {
+                            a("/${board.name}") { +"/${board.name}/" }
+                            +" | "
+                            a("/") { +"Diskuss" }
                         }
-                        body {
-                            h1 { +"/$name/ | Diskuss" }
-                            p { a("/$name/submit") { +"Submit a new thread" } }
-                            threads.subList(startIndex, endIndex).forEach { thread ->
-                                div {
-                                    id = "t${thread.id}"
-                                    p { +"${thread.title} | ${thread.time}" }
-                                    p { +thread.text }
-                                    p { a("thread/${thread.id}") { +"${thread.comments.size} comments" } }
-                                }
+                        p { a("/${board.name}/submit") { +"Submit a new thread" } }
+                        board.threads.subList(startIndex, endIndex).forEach { thread ->
+                            div {
+                                id = "t${thread.id}"
+                                p { +"${thread.title} | ${thread.time}" }
+                                p { +thread.text }
+                                p { a("thread/${thread.id}") { +"${thread.comments.size} comments" } }
                             }
-                            p {
-                                for (i in 1..10)
-                                    a("/$name/$i") { +"$i " }
-                            }
+                        }
+                        p {
+                            for (i in 1..10)
+                                a("/${board.name}/$i") { +"$i " }
                         }
                     }
                 }
@@ -76,11 +79,18 @@ fun Application.module() {
 
             route("submit") {
                 get {
+                    val board = call.attributes[boardKey]
+
                     call.respondHtml {
                         head {
                             title { +"New thread | Diskuss" }
                         }
                         body {
+                            h1 {
+                                a("/${board.name}") { +"/${board.name}/" }
+                                +" | "
+                                a("/") { +"Diskuss" }
+                            }
                             p { +"Submit a new thread" }
                             form(method = FormMethod.post) {
                                 acceptCharset = "utf-8"
@@ -136,12 +146,17 @@ fun Application.module() {
                 get {
                     val board = call.attributes[boardKey]
                     val thread = call.attributes[threadKey]
+
                     call.respondHtml {
                         head {
                             title { +"${thread.title} | Diskuss" }
                         }
                         body {
-                            h1 { +"/${board.name}/ | Diskuss" }
+                            h1 {
+                                a("/${board.name}") { +"/${board.name}/" }
+                                +" | "
+                                a("/") { +"Diskuss" }
+                            }
                             div {
                                 id = "t${thread.id}"
                                 p { +"${thread.title} | ${thread.time}" }
