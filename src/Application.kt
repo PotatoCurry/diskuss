@@ -28,7 +28,23 @@ fun Application.module() {
 
     routing {
         get {
-            call.respondText("Welcome to diskuss")
+            call.respondHtml {
+                head {
+                    title { +"Diskuss" }
+                }
+                body {
+                    h1 { a("/") { +"Diskuss" } }
+                    h2 { +"Boards" }
+                    ul {
+                        boards.forEach { board -> // TODO: Add board full name/description - do this when boards become declared in file instead of hardcoded
+                            li {
+                                p { a(board.name) { +"${board.name} - description" } }
+                            }
+                        }
+                    }
+
+                }
+            }
         }
 
         route("{board}") {
@@ -66,7 +82,7 @@ fun Application.module() {
                                 id = "t${thread.id}"
                                 p { +"${thread.title} | ${thread.time}" }
                                 p { +thread.text }
-                                p { a("thread/${thread.id}") { +"${thread.comments.size} comments" } }
+                                p { a("/${board.name}/thread/${thread.id}") { +"${thread.comments.size} comments" } }
                             }
                         }
                         p {
