@@ -14,7 +14,6 @@ class ApplicationTest {
         withTestApplication({ module() }) {
             handleRequest(HttpMethod.Get, "/").apply {
                 assertEquals(HttpStatusCode.OK, response.status())
-                assertEquals("Welcome to diskuss", response.content)
             }
         }
     }
