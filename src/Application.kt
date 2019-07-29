@@ -9,6 +9,7 @@ import io.ktor.features.CallLogging
 import io.ktor.html.respondHtml
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.Parameters
+import io.ktor.http.content.*
 import io.ktor.request.receiveParameters
 import io.ktor.response.respondRedirect
 import io.ktor.response.respondText
@@ -27,10 +28,15 @@ fun Application.module() {
     install(CallLogging)
 
     routing {
+        static("assets") {
+            resources("assets")
+        }
+
         get {
             call.respondHtml {
                 head {
-                    title { +"Diskuss" }
+                    title("Diskuss")
+                    link("/assets/main.css", "stylesheet")
                 }
                 body {
                     h1 { a("/") { +"Diskuss" } }
@@ -68,21 +74,24 @@ fun Application.module() {
 
                 call.respondHtml {
                     head {
-                        title { +"/${board.name}/ | Diskuss" }
+                        title("/${board.name}/ | Diskuss")
+                        link("/assets/main.css", "stylesheet")
                     }
                     body {
-                        h1 {
+                        div("nav") {
+                            id = "navbar"
+                            a("/", classes = "title") { +"Diskuss" }
                             a("/${board.name}") { +"/${board.name}/" }
-                            +" | "
-                            a("/") { +"Diskuss" }
                         }
-                        p { a("/${board.name}/submit") { +"Submit a new thread" } }
-                        board.threads.subList(startIndex, endIndex).forEach { thread ->
-                            div {
-                                id = "t${thread.id}"
-                                p { +"${thread.title} | ${thread.time}" }
-                                p { +thread.text }
-                                p { a("/${board.name}/thread/${thread.id}") { +"${thread.comments.size} comments" } }
+                        a("/${board.name}/submit") { +"Submit a new thread" } // TODO: Move to upper-right
+                        div("contain") {
+                            board.threads.subList(startIndex, endIndex).forEach { thread ->
+                                div("thread") {
+                                    id = "t${thread.id}"
+                                    p("big") { +"${thread.title} | ${thread.time}" }
+                                    p { +thread.text }
+                                    p { a("/${board.name}/thread/${thread.id}") { +"${thread.comments.size} comments" } }
+                                }
                             }
                         }
                         p {
@@ -99,7 +108,8 @@ fun Application.module() {
 
                     call.respondHtml {
                         head {
-                            title { +"New thread | Diskuss" }
+                            title("New thread | Diskuss")
+                            link("/assets/main.css", "stylesheet")
                         }
                         body {
                             h1 {
@@ -165,7 +175,8 @@ fun Application.module() {
 
                     call.respondHtml {
                         head {
-                            title { +"${thread.title} | Diskuss" }
+                            title("${thread.title} | Diskuss")
+                            link("/assets/main.css", "stylesheet")
                         }
                         body {
                             h1 {
