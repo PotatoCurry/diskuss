@@ -112,10 +112,10 @@ fun Application.module() {
                             link("/assets/main.css", "stylesheet")
                         }
                         body {
-                            h1 {
+                            div("nav") {
+                                id = "navbar"
+                                a("/", classes = "title") { +"Diskuss" }
                                 a("/${board.name}") { +"/${board.name}/" }
-                                +" | "
-                                a("/") { +"Diskuss" }
                             }
                             p { +"Submit a new thread" }
                             form(method = FormMethod.post) {
@@ -179,22 +179,26 @@ fun Application.module() {
                             link("/assets/main.css", "stylesheet")
                         }
                         body {
-                            h1 {
+                            div("nav") {
+                                id = "navbar"
+                                a("/", classes = "title") { +"Diskuss" }
                                 a("/${board.name}") { +"/${board.name}/" }
-                                +" | "
-                                a("/") { +"Diskuss" }
                             }
-                            div {
-                                id = "t${thread.id}"
-                                p { +"${thread.title} | ${thread.time}" }
-                                p { +thread.text }
-                            }
-                            thread.comments.forEach { comment ->
-                                div {
-                                    id = "c${comment.id}"
-                                    p { +"Anonymous | ${comment.time}" }
-                                    p { +comment.text }
-                                    p { a("#c${comment.id}") { +"Link" } }
+                            div("contain") {
+                                div("threadTitle") {
+                                    id = "t${thread.id}"
+                                    p { +"${thread.title} | ${thread.time}" }
+                                    p { +thread.text }
+                                }
+                                div("commentcontain") {
+                                    thread.comments.forEach { comment ->
+                                        div("thread") {
+                                            id = "c${comment.id}"
+                                            p { +"Anonymous | ${comment.time}" }
+                                            p { +comment.text }
+                                            p { a("#c${comment.id}") { +"Link" } }
+                                        }
+                                    }
                                 }
                             }
 
