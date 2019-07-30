@@ -1,6 +1,6 @@
-/* 
+/*
 some colors
-#24292E 
+#24292E
 
 */
 @keyframes fadein {
@@ -61,7 +61,7 @@ body, html{
 .nav input{
 	width: 70%;
 	border:none;
-	padding: 5px;	
+	padding: 5px;
 	font-size: 20px;
 	margin-top: 3px;
 	background-color: #3F4448;
@@ -81,6 +81,9 @@ body, html{
 	cursor: pointer;
 	background-color: #3F4448;
 }
+.nav .s-cont button:hover{
+	background-color: white;
+}
 .contain{
 	padding: 2%;
 	width: 80%;
@@ -88,16 +91,20 @@ body, html{
 .header{
 	padding-bottom: 10px;
 }
-.thread{
+
+.thread, .comment{
 	padding-left: 2%;
 	padding-top: 5px;
 	padding-bottom: 10px;
 	background-color: #3F4448;
 	border-radius: 10px;
-	animation: fadein 2s;
 	transition: 0.3s;
+	padding-right: 2%;
 }
 .thread:hover{
+	background-color: #393e46;
+}
+.comment:hover{
 	background-color: #393e46;
 }
 
@@ -115,14 +122,15 @@ a{
 p{
 	font-size: 16px;
 	color: white;
+	word-wrap: break-word;
 }
 .big{
 	font-size: 24px;
 	color: white;
 }
 .big2{
-	font-size: 20px;
-	color: white;
+	font-size: 20px
+;i	color: white;
 }
 
 .threadTitle{
@@ -131,7 +139,12 @@ p{
 	padding-bottom: 10px;
 	background-color: #3F4448;
 	border-radius: 10px;
+	padding-right: 2%;
 }
 .commentcontain{
 	margin-left: 3%;
+}
+
+h1{
+    word-wrap: break-word;
 }

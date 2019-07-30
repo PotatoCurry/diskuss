@@ -82,8 +82,14 @@ fun Application.module() {
                             id = "navbar"
                             a("/", classes = "title") { +"Diskuss" }
                             a("/${board.name}") { +"/${board.name}/" }
+                            a(href = "/${board.name}/submit", classes = "right"){+"Submit"}
                         }
-                        a("/${board.name}/submit") { +"Submit a new thread" } // TODO: Move to upper-right
+                        div(classes = "contain") {
+                            div(classes = "header") {
+                                h1 { +"/${board.name}/" }
+                                a("/${board.name}/submit") { +"Submit a new thread" } // TODO: Move to upper-right
+                            }
+                        }
                         div("contain") {
                             board.threads.subList(startIndex, endIndex).forEach { thread ->
                                 div("thread") {
@@ -91,13 +97,17 @@ fun Application.module() {
                                     p("big") { +"${thread.title} | ${thread.time}" }
                                     p { +thread.text }
                                     p { a("/${board.name}/thread/${thread.id}") { +"${thread.comments.size} comments" } }
+
                                 }
+                                br {}
+                            }
+
+                            p {
+                                for (i in 1..10)
+                                    a("/${board.name}/$i") { +"$i " }
                             }
                         }
-                        p {
-                            for (i in 1..10)
-                                a("/${board.name}/$i") { +"$i " }
-                        }
+
                     }
                 }
             }
@@ -187,9 +197,11 @@ fun Application.module() {
                             div("contain") {
                                 div("threadTitle") {
                                     id = "t${thread.id}"
-                                    p { +"${thread.title} | ${thread.time}" }
+                                    h1{+"${thread.title}"}
+                                    h2 { +"Anonymous | ${thread.time}" }
                                     p { +thread.text }
                                 }
+                                br{}
                                 div("commentcontain") {
                                     thread.comments.forEach { comment ->
                                         div("thread") {
@@ -198,6 +210,7 @@ fun Application.module() {
                                             p { +comment.text }
                                             p { a("#c${comment.id}") { +"Link" } }
                                         }
+                                        br{}
                                     }
                                 }
                             }
