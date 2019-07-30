@@ -84,12 +84,6 @@ fun Application.module() {
                             a("/${board.name}") { +"/${board.name}/" }
                             a(href = "/${board.name}/submit", classes = "right"){+"Submit"}
                         }
-                        div(classes = "contain") {
-                            div(classes = "header") {
-                                h1 { +"/${board.name}/" }
-                                a("/${board.name}/submit") { +"Submit a new thread" } // TODO: Move to upper-right
-                            }
-                        }
                         div("contain") {
                             board.threads.subList(startIndex, endIndex).forEach { thread ->
                                 div("thread") {
@@ -126,8 +120,8 @@ fun Application.module() {
                                 id = "navbar"
                                 a("/", classes = "title") { +"Diskuss" }
                                 a("/${board.name}") { +"/${board.name}/" }
+                                a(href = "/${board.name}/submit", classes = "right"){+"Submit"}
                             }
-                            p { +"Submit a new thread" }
                             form(method = FormMethod.post) {
                                 acceptCharset = "utf-8"
                                 p {
@@ -193,6 +187,7 @@ fun Application.module() {
                                 id = "navbar"
                                 a("/", classes = "title") { +"Diskuss" }
                                 a("/${board.name}") { +"/${board.name}/" }
+                                a(href = "/${board.name}/submit", classes = "right"){+"Submit"}
                             }
                             div("contain") {
                                 div("threadTitle") {
@@ -215,7 +210,7 @@ fun Application.module() {
                                 }
                             }
 
-                            p { +"Submit a comment" }
+                            p { +"Comment" }
                             form(method = FormMethod.post) {
                                 acceptCharset = "utf-8"
                                 p {
