@@ -103,15 +103,26 @@ fun Application.module() {
                                 br {}
                             }
 
-                            p {
-                                for (i in 1..10)
-                                    if(i == page){
-                                        a("/${board.name}/$i" , classes="active") { +"$i " }
-                                    }
-                                    else{
-                                        a("/${board.name}/$i" , classes="pager") { +"$i " }
-                                    }
+                            p("pagerp"){
+                                if (page === 1) {
+                                    a("/${board.name}/$1", classes = "active roundL") { +"1 " }
+                                } else {
+                                    a("/${board.name}/$1", classes = "pager roundL") { +"1 " }
+                                }
 
+                                for (i in 2..9){ //make first and last element have rounded corner
+                                    if (i === page) {
+                                        a("/${board.name}/$i", classes = "active") { +"$i " }
+                                    } else {
+                                        a("/${board.name}/$i", classes = "pager") { +"$i " }
+                                    }
+                                }
+
+                                if (page === 10) {
+                                    a("/${board.name}/$10", classes = "active roundR") { +"10 " }
+                                } else {
+                                    a("/${board.name}/$10", classes = "pager roundR") { +"10 " }
+                                }
                             }
                         }
 
