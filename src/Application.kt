@@ -39,16 +39,22 @@ fun Application.module() {
                     link("/assets/main.css", "stylesheet")
                 }
                 body {
-                    h1 { a("/") { +"Diskuss" } }
-                    h2 { +"Boards" }
-                    ul {
-                        boards.forEach { board -> // TODO: Add board full name/description - do this when boards become declared in file instead of hardcoded
-                            li {
-                                p { a(board.name) { +"${board.name} - description" } }
+                    div("nav") {
+                        id = "navbar"
+                        a("/", classes = "title") { +"Diskuss" }
+                    }
+                    div("contain") {
+                        h1  { +"Welcome To Diskuss!" }
+                        h2 { +"Boards" }
+                        ul {
+                            boards.forEach { board ->
+                                // TODO: Add board full name/description - do this when boards become declared in file instead of hardcoded
+                                li {
+                                    p { a(board.name) { +"${board.name} - description" } }
+                                }
                             }
                         }
                     }
-
                 }
             }
         }
@@ -85,20 +91,27 @@ fun Application.module() {
                             a(href = "/${board.name}/submit", classes = "right"){+"Submit"}
                         }
                         div("contain") {
+
+                            h2{ a(href = "/${board.name}/submit"){+"Submit A New Thread"}}
                             board.threads.subList(startIndex, endIndex).forEach { thread ->
                                 div("thread") {
                                     id = "t${thread.id}"
                                     p("big") { +"${thread.title} | ${thread.time}" }
                                     p { +thread.text }
                                     p { a("/${board.name}/thread/${thread.id}") { +"${thread.comments.size} comments" } }
-
                                 }
                                 br {}
                             }
 
                             p {
                                 for (i in 1..10)
-                                    a("/${board.name}/$i") { +"$i " }
+                                    if(i == page){
+                                        a("/${board.name}/$i" , classes="active") { +"$i " }
+                                    }
+                                    else{
+                                        a("/${board.name}/$i" , classes="pager") { +"$i " }
+                                    }
+
                             }
                         }
 
@@ -122,20 +135,23 @@ fun Application.module() {
                                 a("/${board.name}") { +"/${board.name}/" }
                                 a(href = "/${board.name}/submit", classes = "right"){+"Submit"}
                             }
-                            form(method = FormMethod.post) {
-                                acceptCharset = "utf-8"
-                                p {
-                                    label { +"Title: " }
-                                    textInput { name = "title" }
-                                }
-                                p {
-                                    label { +"Text: " }
-                                    textInput { name = "text" }
-                                }
-                                p {
-                                    submitInput { value = "send" }
+                            div("contain"){
+                                form(method = FormMethod.post) {
+                                    acceptCharset = "utf-8"
+                                    p("big") {
+                                        label { +"Title: " }
+                                        textInput { name = "title" }
+                                    }
+                                    p("big") {
+                                        label { +"Text: " }
+                                        textInput { name = "text" }
+                                    }
+
+                                    submitInput(classes="button") { value = "Send" }
+
                                 }
                             }
+
                         }
                     }
                 }
@@ -189,7 +205,11 @@ fun Application.module() {
                                 a("/${board.name}") { +"/${board.name}/" }
                                 a(href = "/${board.name}/submit", classes = "right"){+"Submit"}
                             }
+
                             div("contain") {
+                                a("/${board.name}") { +"Back to /${board.name}/" }
+                                br {}
+                                br {}
                                 div("threadTitle") {
                                     id = "t${thread.id}"
                                     h1{+"${thread.title}"}
@@ -205,20 +225,19 @@ fun Application.module() {
                                             p { +comment.text }
                                             p { a("#c${comment.id}") { +"Link" } }
                                         }
-                                        br{}
+                                        br {}
                                     }
                                 }
-                            }
 
-                            p { +"Comment" }
-                            form(method = FormMethod.post) {
-                                acceptCharset = "utf-8"
-                                p {
-                                    label { +"Text: " }
-                                    textInput { name = "text" }
-                                }
-                                p {
-                                    submitInput { value = "send" }
+                                p { +"Comment" }
+                                form(method = FormMethod.post) {
+                                    acceptCharset = "utf-8"
+                                    p {
+                                        label { +"Text: " }
+                                        textInput { name = "text" }
+                                    }
+                                    submitInput(classes = "button"){ value = "send" }
+
                                 }
                             }
                         }
