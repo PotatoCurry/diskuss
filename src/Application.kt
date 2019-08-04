@@ -50,7 +50,7 @@ fun Application.module() {
                             boards.forEach { board ->
                                 // TODO: Add board full name/description - do this when boards become declared in file instead of hardcoded
                                 li {
-                                    p { a(board.name) { +"${board.name} - description" } }
+                                    p { a(board.name) { +"${board.name} - discuss is boaring" } }
                                 }
                             }
                         }
@@ -88,7 +88,7 @@ fun Application.module() {
                             id = "navbar"
                             a("/", classes = "title") { +"Diskuss" }
                             a("/${board.name}") { +"/${board.name}/" }
-                            a(href = "/${board.name}/submit", classes = "right"){+"Submit"}
+                            a("/${board.name}/submit", classes = "right"){+"Submit"}
                         }
                         div("contain") {
 
@@ -144,18 +144,18 @@ fun Application.module() {
                                 id = "navbar"
                                 a("/", classes = "title") { +"Diskuss" }
                                 a("/${board.name}") { +"/${board.name}/" }
-                                a(href = "/${board.name}/submit", classes = "right"){+"Submit"}
                             }
                             div("contain"){
+                                a("/${board.name}") { +"Back to /${board.name}/" }
                                 form(method = FormMethod.post) {
                                     acceptCharset = "utf-8"
                                     p("big") {
                                         label { +"Title: " }
-                                        textInput { name = "title" }
+                                        textInput(classes="textbox"){ name = "title" }
                                     }
                                     p("big") {
                                         label { +"Text: " }
-                                        textInput { name = "text" }
+                                        textInput (classes="textbox"){ name = "text" }
                                     }
 
                                     submitInput(classes="button") { value = "Send" }
@@ -245,7 +245,7 @@ fun Application.module() {
                                     acceptCharset = "utf-8"
                                     p {
                                         label { +"Text: " }
-                                        textInput { name = "text" }
+                                        textInput (classes="textbox"){ name = "text" }
                                     }
                                     submitInput(classes = "button"){ value = "send" }
 
