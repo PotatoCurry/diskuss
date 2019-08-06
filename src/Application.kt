@@ -44,7 +44,6 @@ fun Application.module() {
                         a("/", classes = "title") { +"Diskuss" }
                     }
                     div("contain") {
-                        h1  { +"Welcome To Diskuss!" }
                         h2 { +"Boards" }
                         ul {
                             boards.forEach { board ->
@@ -88,11 +87,9 @@ fun Application.module() {
                             id = "navbar"
                             a("/", classes = "title") { +"Diskuss" }
                             a("/${board.name}") { +"/${board.name}/" }
-                            a("/${board.name}/submit", classes = "right"){+"Submit"}
+                            a("/${board.name}/submit", classes = "right") { +"Submit" }
                         }
                         div("contain") {
-
-                            h2{ a(href = "/${board.name}/submit"){+"Submit A New Thread"}}
                             board.threads.subList(startIndex, endIndex).forEach { thread ->
                                 div("thread") {
                                     id = "t${thread.id}"
@@ -100,32 +97,27 @@ fun Application.module() {
                                     p { +thread.text }
                                     p { a("/${board.name}/thread/${thread.id}") { +"${thread.comments.size} comments" } }
                                 }
-                                br {}
+                                br
                             }
 
                             p("pagerp"){
-                                if (page === 1) {
+                                if (page == 1)
                                     a("/${board.name}/$1", classes = "active roundL") { +"1 " }
-                                } else {
+                                else
                                     a("/${board.name}/$1", classes = "pager roundL") { +"1 " }
-                                }
 
-                                for (i in 2..9){ //make first and last element have rounded corner
-                                    if (i === page) {
+                                for (i in 2..9) //make first and last element have rounded corner
+                                    if (i == page)
                                         a("/${board.name}/$i", classes = "active") { +"$i " }
-                                    } else {
+                                    else
                                         a("/${board.name}/$i", classes = "pager") { +"$i " }
-                                    }
-                                }
 
-                                if (page === 10) {
+                                if (page == 10)
                                     a("/${board.name}/$10", classes = "active roundR") { +"10 " }
-                                } else {
+                                else
                                     a("/${board.name}/$10", classes = "pager roundR") { +"10 " }
-                                }
                             }
                         }
-
                     }
                 }
             }
@@ -144,6 +136,7 @@ fun Application.module() {
                                 id = "navbar"
                                 a("/", classes = "title") { +"Diskuss" }
                                 a("/${board.name}") { +"/${board.name}/" }
+                                a("/${board.name}/submit", classes = "right") { +"Submit" }
                             }
                             div("contain"){
                                 a("/${board.name}") { +"Back to /${board.name}/" }
@@ -157,9 +150,7 @@ fun Application.module() {
                                         label { +"Text: " }
                                         textInput (classes="textbox"){ name = "text" }
                                     }
-
                                     submitInput(classes="button") { value = "Send" }
-
                                 }
                             }
 
