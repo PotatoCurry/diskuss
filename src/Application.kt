@@ -208,15 +208,15 @@ fun Application.module() {
 
                             div("contain") {
                                 a("/${board.name}") { +"Back to /${board.name}/" }
-                                br {}
-                                br {}
+                                br
+                                br
                                 div("threadTitle") {
                                     id = "t${thread.id}"
                                     h1 { +thread.title }
                                     h2 { +"Anonymous | ${thread.time}" }
                                     p { +thread.text }
                                 }
-                                br{}
+                                br
                                 div("commentcontain") {
                                     thread.comments.forEach { comment ->
                                         div("thread") {
