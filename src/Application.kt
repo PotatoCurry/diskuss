@@ -203,7 +203,7 @@ fun Application.module() {
                                 id = "navbar"
                                 a("/", classes = "title") { +"Diskuss" }
                                 a("/${board.name}") { +"/${board.name}/" }
-                                a(href = "/${board.name}/submit", classes = "right"){+"Submit"}
+                                a(href = "/${board.name}/submit", classes = "right") { +"Submit" }
                             }
 
                             div("contain") {
@@ -225,7 +225,7 @@ fun Application.module() {
                                             p { +comment.text }
                                             p { a("#c${comment.id}") { +"Link" } }
                                         }
-                                        br {}
+                                        br
                                     }
                                 }
 
@@ -234,10 +234,9 @@ fun Application.module() {
                                     acceptCharset = "utf-8"
                                     p {
                                         label { +"Text: " }
-                                        textInput (classes="textbox"){ name = "text" }
+                                        textInput (classes="textbox") { name = "text" }
                                     }
-                                    submitInput(classes = "button"){ value = "send" }
-
+                                    submitInput(classes = "button") { value = "send" }
                                 }
                             }
                         }
