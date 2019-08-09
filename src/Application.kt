@@ -49,7 +49,7 @@ fun Application.module() {
                             boards.forEach { board ->
                                 // TODO: Add board full name/description - do this when boards become declared in file instead of hardcoded
                                 li {
-                                    p { a(board.name) { +"${board.name} - discuss is boaring" } }
+                                    p { a(board.name) { +"${board.name} - description" } }
                                 }
                             }
                         }
@@ -139,7 +139,6 @@ fun Application.module() {
                                 a("/${board.name}/submit", classes = "right") { +"Submit" }
                             }
                             div("contain"){
-                                a("/${board.name}") { +"Back to /${board.name}/" }
                                 form(method = FormMethod.post) {
                                     acceptCharset = "utf-8"
                                     p("big") {
@@ -153,7 +152,6 @@ fun Application.module() {
                                     submitInput(classes="button") { value = "Send" }
                                 }
                             }
-
                         }
                     }
                 }
