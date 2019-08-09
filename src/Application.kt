@@ -212,7 +212,7 @@ fun Application.module() {
                                 br {}
                                 div("threadTitle") {
                                     id = "t${thread.id}"
-                                    h1{+"${thread.title}"}
+                                    h1 { +thread.title }
                                     h2 { +"Anonymous | ${thread.time}" }
                                     p { +thread.text }
                                 }
