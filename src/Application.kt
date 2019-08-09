@@ -1,6 +1,11 @@
 package io.github.potatocurry.diskuss
 
+import io.github.potatocurry.diskuss.Boards.name
+import io.github.potatocurry.diskuss.Comments.threadId
 import io.github.potatocurry.diskuss.Manager.boards
+import io.github.potatocurry.diskuss.Threads.boardId
+import io.github.potatocurry.diskuss.Threads.text
+import io.github.potatocurry.diskuss.Threads.time
 import io.ktor.application.Application
 import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.call
@@ -9,7 +14,8 @@ import io.ktor.features.CallLogging
 import io.ktor.html.respondHtml
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.Parameters
-import io.ktor.http.content.*
+import io.ktor.http.content.resources
+import io.ktor.http.content.static
 import io.ktor.request.receiveParameters
 import io.ktor.response.respondRedirect
 import io.ktor.response.respondText
@@ -20,11 +26,26 @@ import io.ktor.routing.routing
 import io.ktor.server.netty.EngineMain
 import io.ktor.util.AttributeKey
 import kotlinx.html.*
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
 import kotlin.math.min
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
 fun Application.module() {
+    Database.connect("jdbc:h2:mem:regular;DB_CLOSE_DELAY=-1;", "org.h2.Driver")
+
+    transaction {
+        addLogger(StdOutSqlLogger)
+
+        SchemaUtils.create(Boards, Threads, Comments)
+        importBoards().forEach { boardName ->
+            Boards.insert {
+                it[name] = boardName
+            }
+        }
+    }
+
     install(CallLogging)
 
     routing {
@@ -73,9 +94,10 @@ fun Application.module() {
 
             get("{page?}") {
                 val board = call.attributes[boardKey]
+                val threads = board.threads
                 val page = call.parameters["page"]?.toIntOrNull() ?: 1
-                val startIndex = min((page - 1) * 10, board.threads.size)
-                val endIndex = min(startIndex + 10, board.threads.size)
+                val startIndex = min((page - 1) * 10, threads.size)
+                val endIndex = min(startIndex + 10, threads.size)
 
                 call.respondHtml {
                     head {
@@ -100,7 +122,7 @@ fun Application.module() {
                                 br
                             }
 
-                            p("pagerp"){
+                            p("pagerp") {
                                 if (page == 1)
                                     a("/${board.name}/$1", classes = "active roundL") { +"1 " }
                                 else
@@ -161,14 +183,13 @@ fun Application.module() {
 
                     if (validateThread(submission)) {
                         val board = call.attributes[boardKey]
-                        board.add(
-                            Thread(
-                                submission["title"]!!,
-                                submission["text"]!!
-                            ).also {
-                                call.respondRedirect("thread/${it.id}")
-                            }
-                        )
+                        Manager.insertThread(
+                            board,
+                            submission["title"]!!,
+                            submission["text"]!!
+                        ).also {
+                            call.respondRedirect("thread/${it[Threads.id]}")
+                        }
                     } else {
                         call.respondText("Invalid registration data", status = HttpStatusCode.UnprocessableEntity)
                     }
@@ -248,13 +269,12 @@ fun Application.module() {
 
                     if (validateComment(submission)) {
                         val thread = call.attributes[threadKey]
-                        thread.comments.add(
-                            Comment(
-                                submission["text"]!!
-                            ).also {
-                                call.respondRedirect("#c${it.id}")
-                            }
-                        )
+                        Manager.insertComment(
+                            thread,
+                            submission["text"]!!
+                        ).also {
+                            call.respondRedirect("#c${it[Comments.id]}")
+                        }
                     } else {
                         call.respondText("Invalid registration data", status = HttpStatusCode.UnprocessableEntity)
                     }
@@ -262,6 +282,10 @@ fun Application.module() {
             }
         }
     }
+}
+
+private fun importBoards(): List<String> {
+    return listOf("abc", "test")
 }
 
 private fun validateThread(submission: Parameters): Boolean {

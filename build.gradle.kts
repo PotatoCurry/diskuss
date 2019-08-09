@@ -26,8 +26,8 @@ dependencies {
     compile("ch.qos.logback:logback-classic:$logback_version")
     compile("io.ktor:ktor-server-core:$ktor_version")
     compile("io.ktor:ktor-html-builder:$ktor_version")
-//    compile("org.jetbrains.exposed:exposed:0.16.2")
-//    compile("me.liuwj.ktorm:ktorm-core::2.4")
+    compile("org.jetbrains.exposed:exposed:0.16.3")
+    compile("com.h2database:h2:1.4.197")
     testCompile("io.ktor:ktor-server-tests:$ktor_version")
 }
 
