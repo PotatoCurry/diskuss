@@ -42,7 +42,6 @@ fun Application.module() {
                     it[description] = boardInfo.second
                 }
         }
-
     }
 
     install(CallLogging)

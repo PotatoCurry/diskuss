@@ -1,8 +1,10 @@
 package io.github.potatocurry.diskuss
 
+import io.github.potatocurry.diskuss.Comments.threadId
+import io.github.potatocurry.diskuss.Threads.boardId
+import io.github.potatocurry.diskuss.Threads.id
 import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
@@ -14,6 +16,11 @@ object Manager {
 
     fun insertThread(board: Board, threadTitle: String, threadText: String): InsertStatement<Number> {
         return transaction {
+            if (board.threads.count() >= 100) {
+                val deleteThread = board.threads.minBy { it.time }?.id
+                Threads.deleteWhere(1) { (id eq deleteThread) }
+                Comments.deleteWhere { (threadId eq deleteThread) }
+            }
             Threads.insert {
                 it[boardId] = EntityID(board.id, Boards)
                 it[time] = DateTime.now()

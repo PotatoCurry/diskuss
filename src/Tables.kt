@@ -8,14 +8,20 @@ object Boards : IntIdTable() {
 }
 
 object Threads : IntIdTable() {
-    val boardId = (integer("board_id").references(Boards.id)).entityId()
+    val boardId = (integer("board_id")
+        .uniqueIndex()
+        .references(Boards.id))
+        .entityId()
     val time = datetime("time")
     val title = varchar("title", 50)
     val text = text("text")
 }
 
 object Comments : IntIdTable() {
-    val threadId = (integer("thread_id").references(Threads.id)).entityId()
+    val threadId = (integer("thread_id")
+        .uniqueIndex()
+        .references(Threads.id))
+        .entityId()
     val time = datetime("time")
     val text = text("text")
 }
