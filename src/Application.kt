@@ -266,7 +266,6 @@ fun Application.module() {
                     if (validateComment(submission)) {
                         val thread = call.attributes[threadKey]
                         val signedText = submission["text"]!!
-                        KotlinPGP.
                         Manager.insertComment(
                             thread,
                             submission["text"]!!
