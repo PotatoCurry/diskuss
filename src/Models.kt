@@ -20,6 +20,7 @@ class Board(boardRaw: ResultRow) {
 class Thread(threadRaw: ResultRow) {
     val id = threadRaw[Threads.id].value
     val time = threadRaw[Threads.time]
+    val pinned = threadRaw[Threads.pinned]
     val title = threadRaw[Threads.title]
     val text = threadRaw[Threads.text]
     val comments: List<Comment>

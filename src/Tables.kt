@@ -13,6 +13,7 @@ object Threads : IntIdTable() {
         .references(Boards.id))
         .entityId()
     val time = datetime("time")
+    val pinned = bool("pinned")
     val title = varchar("title", 50)
     val text = text("text")
 }
