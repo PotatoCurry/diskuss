@@ -9,10 +9,11 @@ import org.jetbrains.exposed.sql.transactions.transaction
 class Board(boardRaw: ResultRow) {
     val id = boardRaw[Boards.id].value
     val name = boardRaw[Boards.name]
-    val threads = transaction {
-        val threadsRaw = Threads.select { boardId.eq(id) }.toList()
-        threadsRaw.map(::Thread)
-    }
+    val threads: List<Thread>
+        get() = transaction {
+            val threadsRaw = Threads.select { boardId.eq(id) }.toList()
+            threadsRaw.map(::Thread)
+        }
 }
 
 class Thread(threadRaw: ResultRow) {
@@ -20,10 +21,11 @@ class Thread(threadRaw: ResultRow) {
     val time = threadRaw[Threads.time]
     val title = threadRaw[Threads.title]
     val text = threadRaw[Threads.text]
-    val comments = transaction {
-        val commentsRaw = Comments.select { threadId.eq(id) }.toList()
-        commentsRaw.map(::Comment)
-    }
+    val comments: List<Comment>
+        get() = transaction {
+            val commentsRaw = Comments.select { threadId.eq(id) }.toList()
+            commentsRaw.map(::Comment)
+        }
 }
 
 class Comment(commentRaw: ResultRow) {

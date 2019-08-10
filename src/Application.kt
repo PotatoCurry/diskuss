@@ -1,16 +1,13 @@
 package io.github.potatocurry.diskuss
 
 import io.github.potatocurry.diskuss.Boards.name
-import io.github.potatocurry.diskuss.Comments.threadId
 import io.github.potatocurry.diskuss.Manager.boards
-import io.github.potatocurry.diskuss.Threads.boardId
-import io.github.potatocurry.diskuss.Threads.text
-import io.github.potatocurry.diskuss.Threads.time
 import io.ktor.application.Application
 import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.CallLogging
+import io.ktor.html.insert
 import io.ktor.html.respondHtml
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.Parameters
@@ -28,22 +25,24 @@ import io.ktor.util.AttributeKey
 import kotlinx.html.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
+import javax.management.Query.eq
 import kotlin.math.min
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
 fun Application.module() {
-    Database.connect("jdbc:h2:mem:regular;DB_CLOSE_DELAY=-1;", "org.h2.Driver")
+    val database = Database.connect(System.getenv("JDBC_DATABASE_URL"), "org.postgresql.Driver")
 
     transaction {
         addLogger(StdOutSqlLogger)
 
-        SchemaUtils.create(Boards, Threads, Comments)
         importBoards().forEach { boardName ->
-            Boards.insert {
-                it[name] = boardName
-            }
+            if (Boards.select { name.eq(boardName) }.empty())
+                Boards.insert {
+                    it[name] = boardName
+                }
         }
+
     }
 
     install(CallLogging)
@@ -228,7 +227,6 @@ fun Application.module() {
                             }
 
                             div("contain") {
-                                a("/${board.name}") { +"Back to /${board.name}/" }
                                 br
                                 br
                                 div("threadTitle") {
