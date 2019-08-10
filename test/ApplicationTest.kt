@@ -1,6 +1,5 @@
 package io.github.potatocurry.diskuss
 
-import io.ktor.application.Application
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest

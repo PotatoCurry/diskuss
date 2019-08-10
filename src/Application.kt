@@ -7,7 +7,6 @@ import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.CallLogging
-import io.ktor.html.insert
 import io.ktor.html.respondHtml
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.Parameters
@@ -25,17 +24,17 @@ import io.ktor.util.AttributeKey
 import kotlinx.html.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import javax.management.Query.eq
 import kotlin.math.min
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
 fun Application.module() {
-    val database = Database.connect(System.getenv("JDBC_DATABASE_URL"), "org.postgresql.Driver")
+    Database.connect(System.getenv("JDBC_DATABASE_URL"), "org.postgresql.Driver")
 
     transaction {
         addLogger(StdOutSqlLogger)
 
+        SchemaUtils.createMissingTablesAndColumns(Boards, Threads, Comments)
         importBoards().forEach { boardName ->
             if (Boards.select { name.eq(boardName) }.empty())
                 Boards.insert {
