@@ -9,6 +9,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 class Board(boardRaw: ResultRow) {
     val id = boardRaw[Boards.id].value
     val name = boardRaw[Boards.name]
+    val description = boardRaw[Boards.description]
     val threads: List<Thread>
         get() = transaction {
             val threadsRaw = Threads.select { boardId.eq(id) }.toList()

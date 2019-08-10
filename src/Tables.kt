@@ -4,6 +4,7 @@ import org.jetbrains.exposed.dao.IntIdTable
 
 object Boards : IntIdTable() {
     val name = varchar("name", 10)
+    val description = text("description")
 }
 
 object Threads : IntIdTable() {
