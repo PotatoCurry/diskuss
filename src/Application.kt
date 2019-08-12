@@ -162,11 +162,11 @@ fun Application.module() {
                                     acceptCharset = "utf-8"
                                     p("big") {
                                         label { +"Title: " }
-                                        textInput(classes="textbox"){ name = "title" }
+                                        textInput(classes="textbox") { name = "title" }
                                     }
                                     p("big") {
                                         label { +"Text: " }
-                                        textInput (classes="textbox"){ name = "text" }
+                                        textInput(classes="textbox") { name = "text" }
                                     }
                                     submitInput(classes="button") { value = "Send" }
                                 }
@@ -225,7 +225,6 @@ fun Application.module() {
                             }
 
                             div("contain") {
-                                br
                                 br
                                 div("threadTitle") {
                                     id = "t${thread.id}"
