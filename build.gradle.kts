@@ -28,6 +28,7 @@ dependencies {
     compile("io.ktor:ktor-html-builder:$ktor_version")
     compile("org.jetbrains.exposed:exposed:0.16.3")
     compile("org.postgresql:postgresql:42.2.6")
+    compile("moe.tlaster:kotlinpgp:1.0.20")
     testCompile("io.ktor:ktor-server-tests:$ktor_version")
 }
 

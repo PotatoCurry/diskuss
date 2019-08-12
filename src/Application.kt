@@ -35,13 +35,13 @@ fun Application.module() {
         addLogger(StdOutSqlLogger)
 
         SchemaUtils.createMissingTablesAndColumns(Boards, Threads, Comments)
-        importBoards().forEach { boardName ->
-            if (Boards.select { name.eq(boardName) }.empty())
+        importBoards().forEach { boardInfo ->
+            if (Boards.select { name.eq(boardInfo.first) }.empty())
                 Boards.insert {
-                    it[name] = boardName
+                    it[name] = boardInfo.first
+                    it[description] = boardInfo.second
                 }
         }
-
     }
 
     install(CallLogging)
@@ -66,9 +66,8 @@ fun Application.module() {
                         h2 { +"Boards" }
                         ul {
                             boards.forEach { board ->
-                                // TODO: Add board full name/description - do this when boards become declared in file instead of hardcoded
                                 li {
-                                    p { a(board.name) { +"${board.name} - description" } }
+                                    p { a(board.name) { +"${board.name} - ${board.description}" } }
                                 }
                             }
                         }
@@ -163,11 +162,11 @@ fun Application.module() {
                                     acceptCharset = "utf-8"
                                     p("big") {
                                         label { +"Title: " }
-                                        textInput(classes="textbox"){ name = "title" }
+                                        textInput(classes="textbox") { name = "title" }
                                     }
                                     p("big") {
                                         label { +"Text: " }
-                                        textInput (classes="textbox"){ name = "text" }
+                                        textInput(classes="textbox") { name = "text" }
                                     }
                                     submitInput(classes="button") { value = "Send" }
                                 }
@@ -227,7 +226,6 @@ fun Application.module() {
 
                             div("contain") {
                                 br
-                                br
                                 div("threadTitle") {
                                     id = "t${thread.id}"
                                     h2 { +"Anonymous | ${thread.time}" }
@@ -266,6 +264,7 @@ fun Application.module() {
 
                     if (validateComment(submission)) {
                         val thread = call.attributes[threadKey]
+                        val signedText = submission["text"]!!
                         Manager.insertComment(
                             thread,
                             submission["text"]!!
@@ -281,8 +280,8 @@ fun Application.module() {
     }
 }
 
-private fun importBoards(): List<String> {
-    return listOf("abc", "test")
+private fun importBoards(): List<Pair<String, String>> {
+    return listOf("abc" to "General board for every topic", "test" to "Testing board")
 }
 
 private fun validateThread(submission: Parameters): Boolean {
