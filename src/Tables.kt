@@ -9,18 +9,17 @@ object Boards : IntIdTable() {
 
 object Threads : IntIdTable() {
     val boardId = (integer("board_id")
-        .uniqueIndex()
         .references(Boards.id))
         .entityId()
     val time = datetime("time")
     val pinned = bool("pinned")
+        .default(false)
     val title = varchar("title", 50)
     val text = text("text")
 }
 
 object Comments : IntIdTable() {
     val threadId = (integer("thread_id")
-        .uniqueIndex()
         .references(Threads.id))
         .entityId()
     val time = datetime("time")

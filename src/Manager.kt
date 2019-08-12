@@ -15,17 +15,16 @@ object Manager {
         Boards.selectAll().map(::Board)
     }
 
-    fun insertThread(board: Board, threadTitle: String, threadText: String, pin: Boolean = false): InsertStatement<Number> {
+    fun insertThread(board: Board, threadTitle: String, threadText: String): InsertStatement<Number> {
         return transaction {
             if (board.threads.count() >= 100) {
-                val deleteThread = board.threads.minBy { it.time }?.id
+                val deleteThread = board.threads.filterNot { it.pinned }.minBy { it.time }?.id
                 Threads.deleteWhere(1) { (id eq deleteThread) }
                 Comments.deleteWhere { (threadId eq deleteThread) }
             }
             Threads.insert {
                 it[boardId] = EntityID(board.id, Boards)
                 it[time] = DateTime.now()
-                it[pinned] = pin
                 it[title] = threadTitle
                 it[text] = threadText
             }
